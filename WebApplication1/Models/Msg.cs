@@ -10,5 +10,6 @@ namespace WebApplication1.Models
         public int id { get; set; }
         public string nome { get; set; }
         public string msg { get; set; }
+        public DateTime datahora { get; set; }
     }
 }

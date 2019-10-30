@@ -5,6 +5,13 @@
 }
 
 <br />
+
+<style type="text/css">
+    .sender-text{
+    font-size: 8pt
+}
+</style>
+
 @section scripts{
     <script>
         $(document).ready(function () {
@@ -15,28 +22,8 @@
                 }
             });
 
-            var f = $('hid-nome').val();
-
-            if (f == '' || f == undefined || f == null) {
-                $('#modal-container-7766').modal('show');
-            }
-            else {
-                get();
-            }
-
+            get();
         });
-
-        function setnome() {
-
-            var anom = $('#txtnome').val();
-            $('#hid-nome').val(anom);
-
-            if (anom != '') {
-                get();
-                $('#modal-container-7766').modal('hide');
-            }
-
-        }
 
         function enviarmsg() {
             $.ajax({
@@ -45,14 +32,7 @@
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
-
-                        var html = '';
-                        for (var i = 0; i < data.length; i++) {
-                            var obj = data[i];
-                            html += '<li><b>' + obj.nome + '</b><br />' + obj.msg +'</li>';
-                        }
-
-                        $('#ul-msg').html(html);
+                        //set(data);
                         $('#txt-msg').val('');
                     }
                 });
@@ -67,19 +47,23 @@
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
-
-                        var html = '';
-                        for (var i = 0; i < data.length; i++) {
-                            var obj = data[i];
-                            html += '<li><b>' + obj.nome + '</b><br />' + obj.msg +'</li>';
-                        }
-
-                        $('#ul-msg').html(html);
+                        set(data);
                     }
-
                 });
 
             }, 1000);
+        }
+
+        function set(data) {
+            var html = '';
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
+
+                html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br />' + obj.msg + '</li>';
+            }
+
+            $('#ul-msg').html(html);
         }
 
 
@@ -87,7 +71,7 @@
     </script>
 }
 <div class="container-fluid">
-    <input type="hidden" id="hid-nome" />
+    <input type="hidden" id="hid-nome" value="@ViewBag.n" />
     <div class="row">
         <div class="col-12">
             <div class="jumbotron" style="overflow-y: scroll;height: 500px;">
@@ -96,45 +80,13 @@
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-12">
             <div class="form-group">
-                @*<input type="text" class="form-control" id="txt-msg" />
-                    <input type="button" onclick="enviarmsg()" value="enviar" />*@
                 <div class="input-group mb-3">
                     <input type="text" id="txt-msg" class="form-control" placeholder="Mensagem" aria-label="Mensagem" aria-describedby="button-addon2">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="enviarmsg()">Enviar 2</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="modal fade" id="modal-container-7766" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="myModalLabel">
-                                Modal title
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <input type="text" id="txtnome" class="form-control" />
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="setnome()">
-                                Entrar
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
