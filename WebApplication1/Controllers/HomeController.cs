@@ -18,8 +18,25 @@ namespace WebApplication1.Controllers
                 HttpContext.Cache["ObjectList"] = new List<Models.Msg>();
             }
 
+            if (HttpContext.Cache["UserList"] == null)
+            {
+                HttpContext.Cache["UserList"] = new List<String>();
+            }
+
             var s = Models.OnlineUsers.v(GetIPAddress());
-            if (String.IsNullOrEmpty(s)) return null; else ViewBag.n = s;
+            if (String.IsNullOrEmpty(s)) return null;
+            else
+            {
+                List<String> list = (List<String>)HttpContext.Cache["UserList"];
+                ViewBag.n = s;
+
+                if(!list.Contains(s))
+                {
+                    list.Add(s);
+                }
+                
+                HttpContext.Cache["UserList"] = list;
+            }
 
             return View();
         }
@@ -41,13 +58,16 @@ namespace WebApplication1.Controllers
         public JsonResult getMgss()
         {
             List<Models.Msg> msgss = (List<Models.Msg>)HttpContext.Cache["ObjectList"];
+            List<string> listousers = (List<string>)HttpContext.Cache["UserList"];
 
-            if(msgss!= null && msgss.Count > 0)
+            if (msgss!= null && msgss.Count > 0)
             {
                 msgss = msgss.Where(e => e.datahora > DateTime.Now.AddMinutes(-5)).ToList();
-            }            
+            }
 
-            return Json(msgss.OrderByDescending(s => s.id), JsonRequestBehavior.AllowGet);
+            var obj = new { msgss = msgss.OrderByDescending(s => s.id), onlineusers = listousers };
+
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult setMsg(string msg, string nome)
@@ -74,19 +94,6 @@ namespace WebApplication1.Controllers
             }
         }
         
-        //public static string GetLocalIPAddress()
-        //{
-        //    var host = Dns.GetHostEntry(Dns.GetHostName());
-        //    foreach (var ip in host.AddressList)
-        //    {
-        //        if (ip.AddressFamily == AddressFamily.InterNetwork)
-        //        {
-        //            return ip.ToString();
-        //        }
-        //    }
-        //    throw new Exception("No network adapters with an IPv4 address in the system!");
-        //}
-
         protected string GetIPAddress()
         {
             var ip = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList.GetValue(0).ToString();

@@ -2,6 +2,7 @@
     /**/
 
     ViewBag.Title = "Home Page";
+    List<String> list = (List<String>)ViewBag.ListOnlineUsers;
 }
 
 <br />
@@ -32,7 +33,6 @@
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
-                        //set(data);
                         $('#txt-msg').val('');
                     }
                 });
@@ -47,7 +47,8 @@
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
-                        set(data);
+                        set(data.msgss);
+                        $("#onlineusers").text(data.onlineusers);
                     }
                 });
 
@@ -72,6 +73,7 @@
 }
 <div class="container-fluid">
     <input type="hidden" id="hid-nome" value="@ViewBag.n" />
+    <label id="onlineusers"></label>
     <div class="row">
         <div class="col-12">
             <div class="jumbotron" style="overflow-y: scroll;height: 500px;">
