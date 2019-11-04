@@ -11,6 +11,14 @@ namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
+        private string _user
+        {
+            get
+            {
+                return Models.OnlineUsers.getNickByIp(GetIPAddress(), Request.Url.AbsoluteUri.Contains("localhost"));
+            }
+        }
+
         public ActionResult Index()
         {
             if (HttpContext.Cache["ObjectList"] == null)
@@ -23,16 +31,16 @@ namespace WebApplication1.Controllers
                 HttpContext.Cache["UserList"] = new List<String>();
             }
 
-            var s = Models.OnlineUsers.getNickByIp(GetIPAddress(), Request.Url.AbsoluteUri.Contains("localhost"));
-            if (String.IsNullOrEmpty(s)) return null;
+            //user = ;
+            if (String.IsNullOrEmpty(_user)) return null;
             else
             {
                 List<String> list = (List<String>)HttpContext.Cache["UserList"];
-                ViewBag.n = s;
+                ViewBag.n = _user;
 
-                if(!list.Contains(s))
+                if(!list.Contains(_user))
                 {
-                    list.Add(s);
+                    list.Add(_user);
                 }
                 
                 HttpContext.Cache["UserList"] = list;
@@ -58,11 +66,12 @@ namespace WebApplication1.Controllers
         public JsonResult getMgss()
         {
             List<Models.Msg> msgss = (List<Models.Msg>)HttpContext.Cache["ObjectList"];
-            List<string> listousers = (List<string>)HttpContext.Cache["UserList"];
+            List<String> listousers = (List<String>)HttpContext.Cache["UserList"];
 
             if (msgss!= null && msgss.Count > 0)
             {
                 msgss = msgss.Where(e => e.datahora > DateTime.Now.AddMinutes(-5)).ToList();
+                //msgss = msgss.Where(e => e.NomePara == user || e.NomePara == "todos").ToList();
             }
 
             var obj = new { msgss = msgss.OrderByDescending(s => s.id), onlineusers = listousers };

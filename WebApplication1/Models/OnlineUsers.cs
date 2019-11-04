@@ -7,6 +7,9 @@ namespace WebApplication1.Models
 {
     public class OnlineUsers
     {
+        public string Nome { get; set; }
+        public int QtddMsgs { get; set; }
+
         public static string getNickByIp(string a, bool local)
         {
             try
