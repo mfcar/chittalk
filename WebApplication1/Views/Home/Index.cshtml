@@ -15,6 +15,26 @@
 
 @section scripts{
     <script>
+
+        var hook = true;
+        window.onbeforeunload = function () {
+            if (hook) {
+
+                $.ajax({
+                    url: '@Url.Action("removeUser", "Home")',
+                    data: { user: '@ViewBag.n' },
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        set(data.msgss);
+                        $("#onlineusers").text(data.onlineusers);
+                    }
+                });
+
+                return "Did you save your stuff?"
+            }
+        }
+
         $(document).ready(function () {
 
             $("#txt-msg").on('keyup', function (e) {

@@ -93,7 +93,23 @@ namespace WebApplication1.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
-        
+
+        public JsonResult removeUser(string user)
+        {
+            List<String> list = (List<String>)HttpContext.Cache["UserList"];
+            list.Remove(user);
+            HttpContext.Cache["UserList"] = list;
+
+            try
+            {
+                return Json(new { msg = "removido" }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         protected string GetIPAddress()
         {
             var ip = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList.GetValue(0).ToString();
