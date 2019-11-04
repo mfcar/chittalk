@@ -23,7 +23,7 @@ namespace WebApplication1.Controllers
                 HttpContext.Cache["UserList"] = new List<String>();
             }
 
-            var s = Models.OnlineUsers.v(GetIPAddress());
+            var s = Models.OnlineUsers.getNickByIp(GetIPAddress(), Request.Url.AbsoluteUri.Contains("localhost"));
             if (String.IsNullOrEmpty(s)) return null;
             else
             {
@@ -70,13 +70,14 @@ namespace WebApplication1.Controllers
             return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult setMsg(string msg, string nome)
+        public JsonResult setMsg(string msg, string nome, string para)
         {
             List<Models.Msg> msgss = (List<Models.Msg>)HttpContext.Cache["ObjectList"];
 
             Models.Msg omsg = new Models.Msg
             {
-                nome = nome,
+                NomeDe = nome,
+                NomePara = para,
                 msg = msg,
                 datahora = DateTime.Now,
                 id = msgss.Count + 1

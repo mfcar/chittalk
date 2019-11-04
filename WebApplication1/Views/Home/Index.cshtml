@@ -10,9 +10,12 @@
 <style type="text/css">
     .sender-text
     {
-        font-size: 8pt
+        font-size: 8pt;
     }
 
+    .de-para{
+        cursor: pointer;
+    }
 </style>
 
 @section scripts{
@@ -38,6 +41,7 @@
         }
 
         $(document).ready(function () {
+
             $("#txt-msg").on('keyup', function (e) {
                 if (e.keyCode === 13) {
                     enviarmsg();
@@ -50,7 +54,7 @@
         function enviarmsg() {
             $.ajax({
                 url: '@Url.Action("setMsg", "Home")',
-                data: { msg: $('#txt-msg').val(), nome: $('#hid-nome').val() },
+                data: { msg: $('#txt-msg').val(), nome: $('#hid-nome').val(), para: $('#hid-para').val() },
                     type: "POST",
                     dataType: "json",
                     success: function (data) {
@@ -66,13 +70,25 @@
                     data: null,//{ CPF: cpf },
                     type: "GET",
                     dataType: "json",
-                    success: function (data) {
+                    success: function (data)
+                    {
                         set(data.msgss);
                         
                         var htmlOnlineUsers = '';
-                        for (var i = 0; i < data.onlineusers.length; i++) {
+                        for (var i = 0; i < data.onlineusers.length; i++)
+                        {
                             var usuario = data.onlineusers[i];
-                            htmlOnlineUsers += '<li class="list-group-item list-group-item-primary">' + usuario + '</li>';
+                            var userdirect = $('#hid-para').val();
+
+                            if (userdirect == usuario)
+                            {
+                                htmlOnlineUsers += '<li id="' + usuario + '" class="list-group-item de-para list-group-item-primary" onclick="depara(this)">' + usuario + '</li>';
+                            }
+                            else
+                            {
+                                htmlOnlineUsers += '<li id="' + usuario + '" class="list-group-item de-para" onclick="depara(this)">' + usuario + '</li>';
+                            }
+                            
                         }
 
                         $('#onlineusers').html(htmlOnlineUsers);
@@ -83,10 +99,10 @@
 
         function set(data) {
             var html = '';
-            for (var i = 0; i < data.length; i++) {
+            for (var i = 0; i < data.length; i++)
+            {
                 var obj = data[i];
                 var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
-
                 var usuario = obj.nome;
                 html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br />' + formataTxt(obj.msg) + '</li>';
             }
@@ -121,13 +137,26 @@
             return formatedText;
         }
 
+        function depara(li)
+        {
+            $('.de-para').removeClass('list-group-item-primary');
+            $(li).addClass('list-group-item-primary');
+            var user = $(li).attr('id');
+            $('#hid-para').val(user);
+        }
+
     </script>
 }
     <div class="container-fluid">
         <input type="hidden" id="hid-nome" value="@ViewBag.n" />
+        <input type="hidden" id="hid-para" value="todos" />
         <label></label>
         <div class="row">
             <div class="col-3">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-primary de-para" onclick="depara(this)">Todos</li>
+                </ul>
+                <br />
                 <ul class="list-group" id="onlineusers"></ul>
             </div>
             <div class="col-9">
@@ -147,6 +176,5 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>        
     </div>
-

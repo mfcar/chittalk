@@ -7,7 +7,7 @@ namespace WebApplication1.Models
 {
     public class OnlineUsers
     {
-        public static string v (string a)
+        public static string getNickByIp(string a, bool local)
         {
             try
             {
@@ -26,7 +26,8 @@ namespace WebApplication1.Models
                 ex.ToString();
             }
 
-            return null;
+            if (!local) return null;
+            else return "local";
         }
 
 
