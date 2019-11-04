@@ -23,7 +23,9 @@ namespace WebApplication1
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/diversos").Include(
-                      "~/Scripts/baffle.min.js"));
+                      "~/Scripts/baffle.min.js",
+                      "~/Scripts/favico-0.3.10.min.js",
+                      "~/Scripts/tinycon.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
