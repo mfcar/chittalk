@@ -18,16 +18,11 @@
 </style>
 
 @section scripts{
-    <script>
-
-        Tinycon.setOptions({
-	        width: 11,
-	        height: 11,
-	        font: '11px Segoe UI',
-	        color: '#ffffff',
-	        background: '#FF0000',
-	        fallback: true
+    <script>    
+        var favicon = new Favico({
+            animation : 'pop'
         });
+        var qtdMsgs = 0;
         var hook = true;
         window.onbeforeunload = function () {
             if (hook) {
@@ -132,6 +127,11 @@
                 {
                     html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
                 }
+            }
+            
+            if (parseInt(data.length) != qtdMsgs) {
+                qtdMsgs = parseInt(data.length);
+                favicon.badge(parseInt(data.length));
             }
 
             $('#ul-msg').html(html);
