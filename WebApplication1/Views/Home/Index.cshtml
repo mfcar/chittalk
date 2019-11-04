@@ -16,7 +16,6 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-
             $("#txt-msg").on('keyup', function (e) {
                 if (e.keyCode === 13) {
                     enviarmsg();
@@ -28,7 +27,7 @@
 
         function enviarmsg() {
             $.ajax({
-                    url: '@Url.Action("setMsg", "Home")',
+                url: '@Url.Action("setMsg", "Home")',
                 data: { msg: $('#txt-msg').val(), nome: $('#hid-nome').val() },
                     type: "POST",
                     dataType: "json",
@@ -40,7 +39,6 @@
 
         function get() {
             setInterval(function () {
-
                 $.ajax({
                     url: '@Url.Action("getMgss", "Home")',
                     data: null,//{ CPF: cpf },
@@ -48,10 +46,21 @@
                     dataType: "json",
                     success: function (data) {
                         set(data.msgss);
-                        $("#onlineusers").text(data.onlineusers);
+                        //$("#onlineusers").text(data.onlineusers);
+                        //data.onlineusers.each();
+                        var htmlOnlineUsers = '';
+                        for (var i = 0; i < data.onlineusers.length; i++) {
+                            var usuario = data.onlineusers[i];
+                            if ($('#hid-nome').val() == usuario) {
+                                htmlOnlineUsers += '<li class="list-group-item list-group-item-primary">' + usuario + '</li>';
+                            } else {
+                                htmlOnlineUsers += '<li class="list-group-item">' + usuario + '</li>';
+                            }
+                        }
+
+                        $('#onlineusers').html(htmlOnlineUsers);
                     }
                 });
-
             }, 1000);
         }
 
@@ -61,21 +70,26 @@
                 var obj = data[i];
                 var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
 
-                html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br />' + obj.msg + '</li>';
+                if ($('#hid-nome').val() == usuario) {
+                    html += '<li class="bg-primary"><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br />' + obj.msg + '</li>';
+                } else {
+                    html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br />' + obj.msg + '</li>';
+                }
             }
 
             $('#ul-msg').html(html);
         }
-
-
-
     </script>
 }
 <div class="container-fluid">
     <input type="hidden" id="hid-nome" value="@ViewBag.n" />
-    <label id="onlineusers"></label>
+    <label></label>
     <div class="row">
-        <div class="col-12">
+        <div class="col-3">
+            <ul class="list-group" id="onlineusers">
+            </ul>
+        </div>
+        <div class="col-9">
             <div class="jumbotron" style="overflow-y: scroll;height: 500px;">
                 <ul id="ul-msg">
                 </ul>
@@ -83,12 +97,12 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-9 offset-3">
             <div class="form-group">
                 <div class="input-group mb-3">
                     <input type="text" id="txt-msg" class="form-control" placeholder="Mensagem" aria-label="Mensagem" aria-describedby="button-addon2">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="enviarmsg()">Enviar 2</button>
+                        <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
                     </div>
                 </div>
             </div>
