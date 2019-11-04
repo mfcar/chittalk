@@ -45,6 +45,18 @@
             });
 
             get();
+
+            $('.areaMensagens').hover(
+                function () {
+                    $('.chatMode').show();
+                    $('.caixaMensagem').show();
+                    $('.workMode').hide();
+                  }, function() {
+                    $('.chatMode').hide();
+                    $('.caixaMensagem').hide();
+                    $('.workMode').show();
+                  }
+            );
         });
 
         function enviarmsg() {
@@ -88,7 +100,7 @@
                 var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
 
                 var usuario = obj.nome;
-                html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br />' + formataTxt(obj.msg) + '</li>';
+                html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.nome + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
             }
 
             $('#ul-msg').html(html);
@@ -123,20 +135,66 @@
 
     </script>
 }
-    <div class="container-fluid">
-        <input type="hidden" id="hid-nome" value="@ViewBag.n" />
-        <label></label>
+<div class="container-fluid">
+    <input type="hidden" id="hid-nome" value="@ViewBag.n" />
+    <label></label>
+    <div class="areaMensagens p-2 border shadow-lg">
         <div class="row">
             <div class="col-3">
                 <ul class="list-group" id="onlineusers"></ul>
             </div>
-            <div class="col-9">
+            <div class="col-9 chatMode">
                 <div class="jumbotron" style="overflow-y: scroll;height: 500px;">
                     <ul id="ul-msg"></ul>
                 </div>
             </div>
+            <div class="col-9 workMode">
+                <div class="jumbotron" style="overflow-y: scroll;height: 500px;">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Plugin</th>
+                                <th>Versão</th>
+                                <th>Descrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Colorbox</td>
+                                <td>1.5.14</td>
+                                <td>jQuery lightbox and modal window plugin</td>
+                            </tr>
+                            <tr>
+                                <td>Magnific Popup</td>
+                                <td>0.9.9</td>
+                                <td>Fast, light, mobile-friendly and responsive lightbox and modal dialog plugin.</td>
+                            </tr>
+                            <tr>
+                                <td>iCheck</td>
+                                <td>1.0.2</td>
+                                <td>Highly customizable checkboxes and radio buttons (jQuery and Zepto).</td>
+                            </tr>
+                            <tr>
+                                <td>Vide</td>
+                                <td>0.1.3</td>
+                                <td>Easy as hell jQuery plugin for video backgrounds.</td>
+                            </tr>
+                            <tr>
+                                <td>jQuery Boilerplate</td>
+                                <td>3.3.4</td>
+                                <td>A jump-start for jQuery plugins development.</td>
+                            </tr>
+                            <tr>
+                                <td>Autosize</td>
+                                <td>1.18.13</td>
+                                <td>Automatically adjust textarea height based on user input.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="row">
+        <div class="row caixaMensagem">
             <div class="col-9 offset-3">
                 <div class="form-group">
                     <div class="input-group mb-3">
@@ -149,4 +207,5 @@
             </div>
         </div>
     </div>
+</div>
 
