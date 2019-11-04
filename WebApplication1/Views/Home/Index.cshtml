@@ -18,9 +18,14 @@
 </style>
 
 @section scripts{
-    <script>
-        var favicon = new Favico({
-            animation : 'pop'
+    <script>    
+        Tinycon.setOptions({
+	        width: 11,
+	        height: 11,
+	        font: '11px Segoe UI',
+	        color: '#ffffff',
+	        background: '#FF0000',
+	        fallback: true
         });
         var qtdMsgs = 0;
         var hook = true;
@@ -101,7 +106,6 @@
                             {
                                 htmlOnlineUsers += '<li id="' + usuario + '" class="list-group-item de-para" onclick="depara(this)">' + usuario + '</li>';
                             }
-
                         }
 
                         $('#onlineusers').html(htmlOnlineUsers);
@@ -116,6 +120,19 @@
             {
                 var obj = data[i];
                 var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
+
+                var de = obj.NomeDe;
+                var para = $('#hid-para').val();
+
+                if (para == 'all-online-users')
+                {
+                    html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
+                }
+                else if (obj.NomeDe == para || obj.NomePara == para)
+                {
+                    html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
+                }
+            }
                 var usuario = obj.NomeDe;
                 html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
             }
@@ -170,12 +187,14 @@
     <div class="areaMensagens p-2 rounded border shadow-lg">
         <div class="container-fluid">
             <input type="hidden" id="hid-nome" value="@ViewBag.n" />
-            <input type="hidden" id="hid-para" value="todos" />
+            <input type="hidden" id="hid-para" value="all-online-users" />
             <label></label>
             <div class="row">
                 <div class="col-3">
                     <ul class="list-group">
-                        <li class="list-group-item list-group-item-primary de-para" onclick="depara(this)">Todos</li>
+                        <li id="all-online-users" class="list-group-item list-group-item-primary de-para" onclick="depara(this)">
+                            online-users
+                        </li>
                     </ul>
                     <br />
                     <ul class="list-group" id="onlineusers"></ul>
@@ -234,17 +253,19 @@
             <div class="row caixaMensagem">
                 <div class="col-9 offset-3">
                     <div class="row">
-                        <form>
-                            <div class="form-group">
-                                <label for="txt-msg">Mensagem:</label>
-                                <div class="input-group mb-3">
-                                    <textarea id="txt-msg" class="form-control" placeholder="Mensagem"></textarea>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
+                        <div class="col-12">
+                            <form>
+                                <div class="form-group">
+                                    <label for="txt-msg">Mensagem:</label>
+                                    <div class="input-group mb-3">
+                                        <textarea id="txt-msg" class="form-control col-12" placeholder="Mensagem"></textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
