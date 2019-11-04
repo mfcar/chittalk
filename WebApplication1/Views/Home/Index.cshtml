@@ -18,7 +18,8 @@
 </style>
 
 @section scripts{
-    <script>    
+    <script>
+
         Tinycon.setOptions({
 	        width: 11,
 	        height: 11,
@@ -81,7 +82,7 @@
         }
 
         function get() {
-            @*setInterval(function () {
+            setInterval(function () {
                 $.ajax({
                     url: '@Url.Action("getMgss", "Home")',
                     data: null,//{ CPF: cpf },
@@ -110,7 +111,7 @@
                         $('#onlineusers').html(htmlOnlineUsers);
                     }
                 });
-            }, 1000);*@
+            }, 1000);
         }
 
         function set(data) {
@@ -130,7 +131,7 @@
                 else if (obj.NomeDe == para || obj.NomePara == para)
                 {
                     html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
-                }                
+                }
             }
 
             $('#ul-msg').html(html);
@@ -245,17 +246,19 @@
             <div class="row caixaMensagem">
                 <div class="col-9 offset-3">
                     <div class="row">
-                        <form>
-                            <div class="form-group">
-                                <label for="txt-msg">Mensagem:</label>
-                                <div class="input-group mb-3">
-                                    <textarea id="txt-msg" class="form-control" placeholder="Mensagem"></textarea>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
+                        <div class="col-12">
+                            <form>
+                                <div class="form-group">
+                                    <label for="txt-msg">Mensagem:</label>
+                                    <div class="input-group mb-3">
+                                        <textarea id="txt-msg" class="form-control col-12" placeholder="Mensagem"></textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
