@@ -71,7 +71,7 @@ namespace WebApplication1.Controllers
             if (msgss!= null && msgss.Count > 0)
             {
                 msgss = msgss.Where(e => e.datahora > DateTime.Now.AddMinutes(-5)).ToList();
-                //msgss = msgss.Where(e => e.NomePara == user || e.NomePara == "todos").ToList();
+                msgss = msgss.Where(e => e.NomePara == _user || e.NomePara == "all-online-users" || e.NomeDe == _user).ToList();
             }
 
             var obj = new { msgss = msgss.OrderByDescending(s => s.id), onlineusers = listousers };

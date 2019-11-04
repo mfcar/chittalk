@@ -99,7 +99,6 @@
                             {
                                 htmlOnlineUsers += '<li id="' + usuario + '" class="list-group-item de-para" onclick="depara(this)">' + usuario + '</li>';
                             }
-
                         }
 
                         $('#onlineusers').html(htmlOnlineUsers);
@@ -114,8 +113,18 @@
             {
                 var obj = data[i];
                 var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
-                var usuario = obj.NomeDe;
-                html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
+
+                var de = obj.NomeDe;
+                var para = $('#hid-para').val();
+
+                if (para == 'all-online-users')
+                {
+                    html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
+                }
+                else if (obj.NomeDe == para || obj.NomePara == para)
+                {
+                    html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
+                }                
             }
 
             $('#ul-msg').html(html);
@@ -164,12 +173,14 @@
     <div class="areaMensagens p-2 border shadow-lg">
         <div class="container-fluid">
             <input type="hidden" id="hid-nome" value="@ViewBag.n" />
-            <input type="hidden" id="hid-para" value="todos" />
+            <input type="hidden" id="hid-para" value="all-online-users" />
             <label></label>
             <div class="row">
                 <div class="col-3">
                     <ul class="list-group">
-                        <li class="list-group-item list-group-item-primary de-para" onclick="depara(this)">Todos</li>
+                        <li id="all-online-users" class="list-group-item list-group-item-primary de-para" onclick="depara(this)">
+                            online-users
+                        </li>
                     </ul>
                     <br />
                     <ul class="list-group" id="onlineusers"></ul>
