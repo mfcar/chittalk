@@ -18,8 +18,15 @@
 </style>
 
 @section scripts{
-    <script>
-
+    <script>    
+        Tinycon.setOptions({
+	        width: 11,
+	        height: 11,
+	        font: '11px Segoe UI',
+	        color: '#ffffff',
+	        background: '#FF0000',
+	        fallback: true
+        });
         var hook = true;
         window.onbeforeunload = function () {
             if (hook) {
@@ -40,7 +47,6 @@
         }
 
         $(document).ready(function () {
-
             $("#txt-msg").on('keyup', function (e) {
                 if (e.keyCode === 13) {
                     enviarmsg();
@@ -75,7 +81,7 @@
         }
 
         function get() {
-            setInterval(function () {
+            @*setInterval(function () {
                 $.ajax({
                     url: '@Url.Action("getMgss", "Home")',
                     data: null,//{ CPF: cpf },
@@ -105,7 +111,7 @@
                         $('#onlineusers').html(htmlOnlineUsers);
                     }
                 });
-            }, 1000);
+            }, 1000);*@
         }
 
         function set(data) {
@@ -116,7 +122,8 @@
                 var datehora = new Date(parseInt(data[0].datahora.replace('/Date(', '').replace(')/', '')));
                 var usuario = obj.NomeDe;
                 html += '<li><b><span class="sender-text">[' + datehora.toLocaleString() + '] ' + obj.NomeDe + '</span></b><br /><span class="mensagemItem">' + formataTxt(obj.msg) + '</span></li>';
-            }
+            }            
+            Tinycon.setBubble(parseInt(data.length));
 
             $('#ul-msg').html(html);
         }
@@ -161,7 +168,7 @@
 <div class="container-fluid">
     <input type="hidden" id="hid-nome" value="@ViewBag.n" />
     <label></label>
-    <div class="areaMensagens p-2 border shadow-lg">
+    <div class="areaMensagens p-2 rounded border shadow-lg">
         <div class="container-fluid">
             <input type="hidden" id="hid-nome" value="@ViewBag.n" />
             <input type="hidden" id="hid-para" value="todos" />
@@ -227,13 +234,18 @@
             </div>
             <div class="row caixaMensagem">
                 <div class="col-9 offset-3">
-                    <div class="form-group">
-                        <div class="input-group mb-3">
-                            <input type="text" id="txt-msg" class="form-control" placeholder="Mensagem" aria-label="Mensagem" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
+                    <div class="row">
+                        <form>
+                            <div class="form-group">
+                                <label for="txt-msg">Mensagem:</label>
+                                <div class="input-group mb-3">
+                                    <textarea id="txt-msg" class="form-control" placeholder="Mensagem"></textarea>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-success" type="button" id="button-addon2" onclick="enviarmsg()">Enviar</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
